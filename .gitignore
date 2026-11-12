@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
+IWiMU_Z2_*.docx
+IWiMU_Z2_*.pdf

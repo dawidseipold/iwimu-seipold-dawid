@@ -1,0 +1,973 @@
+{
+  "nazwa": "System wspomagający obsługę zleceń DTP",
+  "cel": "decyzja",
+  "atrybuty": {
+    "rodzaj_zlecenia": {
+      "typ": "wybor",
+      "pytanie": "Jaki jest rodzaj zlecenia?",
+      "wartosci": [
+        "proof",
+        "flexcel"
+      ]
+    },
+    "liniatura": {
+      "typ": "liczba",
+      "pytanie": "Podaj liniaturę (133, 150 lub 175):",
+      "zakres": [
+        100,
+        200
+      ]
+    },
+    "podloze": {
+      "typ": "wybor",
+      "pytanie": "Jakie jest podłoże?",
+      "wartosci": [
+        "papier",
+        "folia"
+      ]
+    },
+    "grubosc_plyty": {
+      "typ": "liczba",
+      "pytanie": "Podaj grubość płyty (1.14 lub 1.7):",
+      "zakres": [
+        1.0,
+        2.0
+      ]
+    },
+    "rodzaj_plyty": {
+      "typ": "wybor",
+      "pytanie": "Jaki jest rodzaj płyty?",
+      "wartosci": [
+        "awers",
+        "rewers"
+      ]
+    },
+    "tag": {
+      "typ": "wniosek",
+      "wartosci": [
+        "bez_tagu",
+        "rewers",
+        "1_7",
+        "1_7_rewers"
+      ]
+    },
+    "decyzja": {
+      "typ": "wniosek",
+      "wartosci": [
+        "PRZEKAZUJĘ GRAFIKOM",
+        "PALETKA 133 PAPIER [BEZ TAGU]",
+        "PALETKA 133 PAPIER [TAG REWERS]",
+        "PALETKA 133 PAPIER [TAG 1_7]",
+        "PALETKA 133 PAPIER [TAG 1_7_REWERS]",
+        "PALETKA 133 FOLIA [BEZ TAGU]",
+        "PALETKA 133 FOLIA [TAG REWERS]",
+        "PALETKA 133 FOLIA [TAG 1_7]",
+        "PALETKA 133 FOLIA [TAG 1_7_REWERS]",
+        "PALETKA 150 PAPIER [BEZ TAGU]",
+        "PALETKA 150 PAPIER [TAG REWERS]",
+        "PALETKA 150 PAPIER [TAG 1_7]",
+        "PALETKA 150 PAPIER [TAG 1_7_REWERS]",
+        "PALETKA 150 FOLIA [BEZ TAGU]",
+        "PALETKA 150 FOLIA [TAG REWERS]",
+        "PALETKA 150 FOLIA [TAG 1_7]",
+        "PALETKA 150 FOLIA [TAG 1_7_REWERS]",
+        "PALETKA 175 PAPIER [BEZ TAGU]",
+        "PALETKA 175 PAPIER [TAG REWERS]",
+        "PALETKA 175 PAPIER [TAG 1_7]",
+        "PALETKA 175 PAPIER [TAG 1_7_REWERS]",
+        "PALETKA 175 FOLIA [BEZ TAGU]",
+        "PALETKA 175 FOLIA [TAG REWERS]",
+        "PALETKA 175 FOLIA [TAG 1_7]",
+        "PALETKA 175 FOLIA [TAG 1_7_REWERS]"
+      ]
+    }
+  },
+  "reguly": [
+    {
+      "id": "P1",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "flexcel"
+        ],
+        [
+          "grubosc_plyty",
+          "==",
+          1.14
+        ],
+        [
+          "rodzaj_plyty",
+          "==",
+          "awers"
+        ]
+      ],
+      "to": [
+        "tag",
+        "bez_tagu"
+      ],
+      "metafora": "Standardowa płyta 1.14 naświetlana na awers nie wymaga dodatkowego oznaczenia."
+    },
+    {
+      "id": "P2",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "flexcel"
+        ],
+        [
+          "grubosc_plyty",
+          "==",
+          1.14
+        ],
+        [
+          "rodzaj_plyty",
+          "==",
+          "rewers"
+        ]
+      ],
+      "to": [
+        "tag",
+        "rewers"
+      ],
+      "metafora": "Płyta 1.14 naświetlana w lustrze musi mieć tag REWERS, żeby nie pomylić strony."
+    },
+    {
+      "id": "P3",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "flexcel"
+        ],
+        [
+          "grubosc_plyty",
+          "==",
+          1.7
+        ],
+        [
+          "rodzaj_plyty",
+          "==",
+          "awers"
+        ]
+      ],
+      "to": [
+        "tag",
+        "1_7"
+      ],
+      "metafora": "Grubsza płyta 1.7 wymaga tagu 1_7, bo naświetla się ją z innymi parametrami."
+    },
+    {
+      "id": "P4",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "flexcel"
+        ],
+        [
+          "grubosc_plyty",
+          "==",
+          1.7
+        ],
+        [
+          "rodzaj_plyty",
+          "==",
+          "rewers"
+        ]
+      ],
+      "to": [
+        "tag",
+        "1_7_rewers"
+      ],
+      "metafora": "Płyta 1.7 w lustrze łączy oba oznaczenia: grubość i rewers."
+    },
+    {
+      "id": "R1",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "proof"
+        ]
+      ],
+      "to": [
+        "decyzja",
+        "PRZEKAZUJĘ GRAFIKOM"
+      ],
+      "metafora": "Proof to wydruk próbny: parametry płyty nie mają znaczenia, zlecenie od razu trafia do grafików.",
+      "coto": "Zlecenie PROOF przekazywane do działu grafików bez przygotowania płyty."
+    },
+    {
+      "id": "R2",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "flexcel"
+        ],
+        [
+          "liniatura",
+          "==",
+          133
+        ],
+        [
+          "podloze",
+          "==",
+          "papier"
+        ],
+        [
+          "tag",
+          "==",
+          "bez_tagu"
+        ]
+      ],
+      "to": [
+        "decyzja",
+        "PALETKA 133 PAPIER [BEZ TAGU]"
+      ],
+      "metafora": "Liniatura 133 i podłoże papier wyznaczają paletkę, a tag dopisuje oznaczenie płyty.",
+      "coto": "Paletka dla liniatury 133 na podłożu papier, bez dodatkowego tagu."
+    },
+    {
+      "id": "R3",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "flexcel"
+        ],
+        [
+          "liniatura",
+          "==",
+          133
+        ],
+        [
+          "podloze",
+          "==",
+          "papier"
+        ],
+        [
+          "tag",
+          "==",
+          "rewers"
+        ]
+      ],
+      "to": [
+        "decyzja",
+        "PALETKA 133 PAPIER [TAG REWERS]"
+      ],
+      "metafora": "Liniatura 133 i podłoże papier wyznaczają paletkę, a tag dopisuje oznaczenie płyty.",
+      "coto": "Paletka dla liniatury 133 na podłożu papier, z tagiem REWERS (płyta 1.14 w lustrze)."
+    },
+    {
+      "id": "R4",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "flexcel"
+        ],
+        [
+          "liniatura",
+          "==",
+          133
+        ],
+        [
+          "podloze",
+          "==",
+          "papier"
+        ],
+        [
+          "tag",
+          "==",
+          "1_7"
+        ]
+      ],
+      "to": [
+        "decyzja",
+        "PALETKA 133 PAPIER [TAG 1_7]"
+      ],
+      "metafora": "Liniatura 133 i podłoże papier wyznaczają paletkę, a tag dopisuje oznaczenie płyty.",
+      "coto": "Paletka dla liniatury 133 na podłożu papier, z tagiem 1_7 (płyta 1.7)."
+    },
+    {
+      "id": "R5",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "flexcel"
+        ],
+        [
+          "liniatura",
+          "==",
+          133
+        ],
+        [
+          "podloze",
+          "==",
+          "papier"
+        ],
+        [
+          "tag",
+          "==",
+          "1_7_rewers"
+        ]
+      ],
+      "to": [
+        "decyzja",
+        "PALETKA 133 PAPIER [TAG 1_7_REWERS]"
+      ],
+      "metafora": "Liniatura 133 i podłoże papier wyznaczają paletkę, a tag dopisuje oznaczenie płyty.",
+      "coto": "Paletka dla liniatury 133 na podłożu papier, z tagiem 1_7_REWERS (płyta 1.7 w lustrze)."
+    },
+    {
+      "id": "R6",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "flexcel"
+        ],
+        [
+          "liniatura",
+          "==",
+          133
+        ],
+        [
+          "podloze",
+          "==",
+          "folia"
+        ],
+        [
+          "tag",
+          "==",
+          "bez_tagu"
+        ]
+      ],
+      "to": [
+        "decyzja",
+        "PALETKA 133 FOLIA [BEZ TAGU]"
+      ],
+      "metafora": "Liniatura 133 i podłoże folia wyznaczają paletkę, a tag dopisuje oznaczenie płyty.",
+      "coto": "Paletka dla liniatury 133 na podłożu folia, bez dodatkowego tagu."
+    },
+    {
+      "id": "R7",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "flexcel"
+        ],
+        [
+          "liniatura",
+          "==",
+          133
+        ],
+        [
+          "podloze",
+          "==",
+          "folia"
+        ],
+        [
+          "tag",
+          "==",
+          "rewers"
+        ]
+      ],
+      "to": [
+        "decyzja",
+        "PALETKA 133 FOLIA [TAG REWERS]"
+      ],
+      "metafora": "Liniatura 133 i podłoże folia wyznaczają paletkę, a tag dopisuje oznaczenie płyty.",
+      "coto": "Paletka dla liniatury 133 na podłożu folia, z tagiem REWERS (płyta 1.14 w lustrze)."
+    },
+    {
+      "id": "R8",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "flexcel"
+        ],
+        [
+          "liniatura",
+          "==",
+          133
+        ],
+        [
+          "podloze",
+          "==",
+          "folia"
+        ],
+        [
+          "tag",
+          "==",
+          "1_7"
+        ]
+      ],
+      "to": [
+        "decyzja",
+        "PALETKA 133 FOLIA [TAG 1_7]"
+      ],
+      "metafora": "Liniatura 133 i podłoże folia wyznaczają paletkę, a tag dopisuje oznaczenie płyty.",
+      "coto": "Paletka dla liniatury 133 na podłożu folia, z tagiem 1_7 (płyta 1.7)."
+    },
+    {
+      "id": "R9",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "flexcel"
+        ],
+        [
+          "liniatura",
+          "==",
+          133
+        ],
+        [
+          "podloze",
+          "==",
+          "folia"
+        ],
+        [
+          "tag",
+          "==",
+          "1_7_rewers"
+        ]
+      ],
+      "to": [
+        "decyzja",
+        "PALETKA 133 FOLIA [TAG 1_7_REWERS]"
+      ],
+      "metafora": "Liniatura 133 i podłoże folia wyznaczają paletkę, a tag dopisuje oznaczenie płyty.",
+      "coto": "Paletka dla liniatury 133 na podłożu folia, z tagiem 1_7_REWERS (płyta 1.7 w lustrze)."
+    },
+    {
+      "id": "R10",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "flexcel"
+        ],
+        [
+          "liniatura",
+          "==",
+          150
+        ],
+        [
+          "podloze",
+          "==",
+          "papier"
+        ],
+        [
+          "tag",
+          "==",
+          "bez_tagu"
+        ]
+      ],
+      "to": [
+        "decyzja",
+        "PALETKA 150 PAPIER [BEZ TAGU]"
+      ],
+      "metafora": "Liniatura 150 i podłoże papier wyznaczają paletkę, a tag dopisuje oznaczenie płyty.",
+      "coto": "Paletka dla liniatury 150 na podłożu papier, bez dodatkowego tagu."
+    },
+    {
+      "id": "R11",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "flexcel"
+        ],
+        [
+          "liniatura",
+          "==",
+          150
+        ],
+        [
+          "podloze",
+          "==",
+          "papier"
+        ],
+        [
+          "tag",
+          "==",
+          "rewers"
+        ]
+      ],
+      "to": [
+        "decyzja",
+        "PALETKA 150 PAPIER [TAG REWERS]"
+      ],
+      "metafora": "Liniatura 150 i podłoże papier wyznaczają paletkę, a tag dopisuje oznaczenie płyty.",
+      "coto": "Paletka dla liniatury 150 na podłożu papier, z tagiem REWERS (płyta 1.14 w lustrze)."
+    },
+    {
+      "id": "R12",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "flexcel"
+        ],
+        [
+          "liniatura",
+          "==",
+          150
+        ],
+        [
+          "podloze",
+          "==",
+          "papier"
+        ],
+        [
+          "tag",
+          "==",
+          "1_7"
+        ]
+      ],
+      "to": [
+        "decyzja",
+        "PALETKA 150 PAPIER [TAG 1_7]"
+      ],
+      "metafora": "Liniatura 150 i podłoże papier wyznaczają paletkę, a tag dopisuje oznaczenie płyty.",
+      "coto": "Paletka dla liniatury 150 na podłożu papier, z tagiem 1_7 (płyta 1.7)."
+    },
+    {
+      "id": "R13",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "flexcel"
+        ],
+        [
+          "liniatura",
+          "==",
+          150
+        ],
+        [
+          "podloze",
+          "==",
+          "papier"
+        ],
+        [
+          "tag",
+          "==",
+          "1_7_rewers"
+        ]
+      ],
+      "to": [
+        "decyzja",
+        "PALETKA 150 PAPIER [TAG 1_7_REWERS]"
+      ],
+      "metafora": "Liniatura 150 i podłoże papier wyznaczają paletkę, a tag dopisuje oznaczenie płyty.",
+      "coto": "Paletka dla liniatury 150 na podłożu papier, z tagiem 1_7_REWERS (płyta 1.7 w lustrze)."
+    },
+    {
+      "id": "R14",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "flexcel"
+        ],
+        [
+          "liniatura",
+          "==",
+          150
+        ],
+        [
+          "podloze",
+          "==",
+          "folia"
+        ],
+        [
+          "tag",
+          "==",
+          "bez_tagu"
+        ]
+      ],
+      "to": [
+        "decyzja",
+        "PALETKA 150 FOLIA [BEZ TAGU]"
+      ],
+      "metafora": "Liniatura 150 i podłoże folia wyznaczają paletkę, a tag dopisuje oznaczenie płyty.",
+      "coto": "Paletka dla liniatury 150 na podłożu folia, bez dodatkowego tagu."
+    },
+    {
+      "id": "R15",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "flexcel"
+        ],
+        [
+          "liniatura",
+          "==",
+          150
+        ],
+        [
+          "podloze",
+          "==",
+          "folia"
+        ],
+        [
+          "tag",
+          "==",
+          "rewers"
+        ]
+      ],
+      "to": [
+        "decyzja",
+        "PALETKA 150 FOLIA [TAG REWERS]"
+      ],
+      "metafora": "Liniatura 150 i podłoże folia wyznaczają paletkę, a tag dopisuje oznaczenie płyty.",
+      "coto": "Paletka dla liniatury 150 na podłożu folia, z tagiem REWERS (płyta 1.14 w lustrze)."
+    },
+    {
+      "id": "R16",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "flexcel"
+        ],
+        [
+          "liniatura",
+          "==",
+          150
+        ],
+        [
+          "podloze",
+          "==",
+          "folia"
+        ],
+        [
+          "tag",
+          "==",
+          "1_7"
+        ]
+      ],
+      "to": [
+        "decyzja",
+        "PALETKA 150 FOLIA [TAG 1_7]"
+      ],
+      "metafora": "Liniatura 150 i podłoże folia wyznaczają paletkę, a tag dopisuje oznaczenie płyty.",
+      "coto": "Paletka dla liniatury 150 na podłożu folia, z tagiem 1_7 (płyta 1.7)."
+    },
+    {
+      "id": "R17",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "flexcel"
+        ],
+        [
+          "liniatura",
+          "==",
+          150
+        ],
+        [
+          "podloze",
+          "==",
+          "folia"
+        ],
+        [
+          "tag",
+          "==",
+          "1_7_rewers"
+        ]
+      ],
+      "to": [
+        "decyzja",
+        "PALETKA 150 FOLIA [TAG 1_7_REWERS]"
+      ],
+      "metafora": "Liniatura 150 i podłoże folia wyznaczają paletkę, a tag dopisuje oznaczenie płyty.",
+      "coto": "Paletka dla liniatury 150 na podłożu folia, z tagiem 1_7_REWERS (płyta 1.7 w lustrze)."
+    },
+    {
+      "id": "R18",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "flexcel"
+        ],
+        [
+          "liniatura",
+          "==",
+          175
+        ],
+        [
+          "podloze",
+          "==",
+          "papier"
+        ],
+        [
+          "tag",
+          "==",
+          "bez_tagu"
+        ]
+      ],
+      "to": [
+        "decyzja",
+        "PALETKA 175 PAPIER [BEZ TAGU]"
+      ],
+      "metafora": "Liniatura 175 i podłoże papier wyznaczają paletkę, a tag dopisuje oznaczenie płyty.",
+      "coto": "Paletka dla liniatury 175 na podłożu papier, bez dodatkowego tagu."
+    },
+    {
+      "id": "R19",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "flexcel"
+        ],
+        [
+          "liniatura",
+          "==",
+          175
+        ],
+        [
+          "podloze",
+          "==",
+          "papier"
+        ],
+        [
+          "tag",
+          "==",
+          "rewers"
+        ]
+      ],
+      "to": [
+        "decyzja",
+        "PALETKA 175 PAPIER [TAG REWERS]"
+      ],
+      "metafora": "Liniatura 175 i podłoże papier wyznaczają paletkę, a tag dopisuje oznaczenie płyty.",
+      "coto": "Paletka dla liniatury 175 na podłożu papier, z tagiem REWERS (płyta 1.14 w lustrze)."
+    },
+    {
+      "id": "R20",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "flexcel"
+        ],
+        [
+          "liniatura",
+          "==",
+          175
+        ],
+        [
+          "podloze",
+          "==",
+          "papier"
+        ],
+        [
+          "tag",
+          "==",
+          "1_7"
+        ]
+      ],
+      "to": [
+        "decyzja",
+        "PALETKA 175 PAPIER [TAG 1_7]"
+      ],
+      "metafora": "Liniatura 175 i podłoże papier wyznaczają paletkę, a tag dopisuje oznaczenie płyty.",
+      "coto": "Paletka dla liniatury 175 na podłożu papier, z tagiem 1_7 (płyta 1.7)."
+    },
+    {
+      "id": "R21",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "flexcel"
+        ],
+        [
+          "liniatura",
+          "==",
+          175
+        ],
+        [
+          "podloze",
+          "==",
+          "papier"
+        ],
+        [
+          "tag",
+          "==",
+          "1_7_rewers"
+        ]
+      ],
+      "to": [
+        "decyzja",
+        "PALETKA 175 PAPIER [TAG 1_7_REWERS]"
+      ],
+      "metafora": "Liniatura 175 i podłoże papier wyznaczają paletkę, a tag dopisuje oznaczenie płyty.",
+      "coto": "Paletka dla liniatury 175 na podłożu papier, z tagiem 1_7_REWERS (płyta 1.7 w lustrze)."
+    },
+    {
+      "id": "R22",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "flexcel"
+        ],
+        [
+          "liniatura",
+          "==",
+          175
+        ],
+        [
+          "podloze",
+          "==",
+          "folia"
+        ],
+        [
+          "tag",
+          "==",
+          "bez_tagu"
+        ]
+      ],
+      "to": [
+        "decyzja",
+        "PALETKA 175 FOLIA [BEZ TAGU]"
+      ],
+      "metafora": "Liniatura 175 i podłoże folia wyznaczają paletkę, a tag dopisuje oznaczenie płyty.",
+      "coto": "Paletka dla liniatury 175 na podłożu folia, bez dodatkowego tagu."
+    },
+    {
+      "id": "R23",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "flexcel"
+        ],
+        [
+          "liniatura",
+          "==",
+          175
+        ],
+        [
+          "podloze",
+          "==",
+          "folia"
+        ],
+        [
+          "tag",
+          "==",
+          "rewers"
+        ]
+      ],
+      "to": [
+        "decyzja",
+        "PALETKA 175 FOLIA [TAG REWERS]"
+      ],
+      "metafora": "Liniatura 175 i podłoże folia wyznaczają paletkę, a tag dopisuje oznaczenie płyty.",
+      "coto": "Paletka dla liniatury 175 na podłożu folia, z tagiem REWERS (płyta 1.14 w lustrze)."
+    },
+    {
+      "id": "R24",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "flexcel"
+        ],
+        [
+          "liniatura",
+          "==",
+          175
+        ],
+        [
+          "podloze",
+          "==",
+          "folia"
+        ],
+        [
+          "tag",
+          "==",
+          "1_7"
+        ]
+      ],
+      "to": [
+        "decyzja",
+        "PALETKA 175 FOLIA [TAG 1_7]"
+      ],
+      "metafora": "Liniatura 175 i podłoże folia wyznaczają paletkę, a tag dopisuje oznaczenie płyty.",
+      "coto": "Paletka dla liniatury 175 na podłożu folia, z tagiem 1_7 (płyta 1.7)."
+    },
+    {
+      "id": "R25",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "flexcel"
+        ],
+        [
+          "liniatura",
+          "==",
+          175
+        ],
+        [
+          "podloze",
+          "==",
+          "folia"
+        ],
+        [
+          "tag",
+          "==",
+          "1_7_rewers"
+        ]
+      ],
+      "to": [
+        "decyzja",
+        "PALETKA 175 FOLIA [TAG 1_7_REWERS]"
+      ],
+      "metafora": "Liniatura 175 i podłoże folia wyznaczają paletkę, a tag dopisuje oznaczenie płyty.",
+      "coto": "Paletka dla liniatury 175 na podłożu folia, z tagiem 1_7_REWERS (płyta 1.7 w lustrze)."
+    },
+    {
+      "id": "R26",
+      "jesli": [
+        [
+          "rodzaj_zlecenia",
+          "==",
+          "flexcel"
+        ],
+        [
+          "liniatura",
+          ">=",
+          100
+        ],
+        [
+          "liniatura",
+          "<=",
+          200
+        ]
+      ],
+      "to": [
+        "decyzja",
+        "PRZEKAZUJĘ GRAFIKOM"
+      ],
+      "metafora": "Reguła zapasowa: gdy żadna standardowa paletka nie pasuje (niestandardowa liniatura lub płyta), zlecenie wraca do grafików. Stoi na końcu, więc działa tylko wtedy, gdy R2–R25 zawiodą.",
+      "coto": "Zlecenie FLEXCEL z niestandardowymi parametrami przekazywane do grafików do ręcznego przygotowania."
+    }
+  ]
+}
